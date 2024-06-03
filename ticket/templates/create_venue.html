@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+<!DOCTYPE >
+{% block title %} {{ title }} {% endblock %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="detailDiv mb-4">
+            <h3 style=" text-align: left ; "><strong>Hinweise</strong></h3>
+            <details>
+                <summary class="venueSummary">Name</summary>
+                <p class="venueSummaryP">Name der Venue.</p>
+            </details>
+
+            <details>
+                <summary class="venueSummary">Location</summary>
+                <p class="venueSummaryP">Adresse der Venue.</p>
+            </details>
+
+            <details>
+                <summary class="venueSummary">Capacity</summary>
+                <p class="venueSummaryP">Die Gesammtzahl der maximal möglichen Gäste.</p>
+            </details>
+
+            <details>
+                <summary class="venueSummary">Additional Information</summary>
+                <p class="venueSummaryP">Falls sie ihrem Venue noch zusätzliche Informationen geben möchten</p>
+            </details>
+
+            <details>
+                <summary class="venueSummary">Google Maps/Picture</summary>
+                <p class="venueSummaryP">Sie können zusätzlich noch die Adresse per Google Maps angeben. <br>
+                    <strong>Wichtig:</strong> Es werden nur offizielle Links voin Google Maps anerkannt.<br>
+                    Sie können auch ein Bild von ihrer Venue angeben.</p>
+            </details>
+        </div>
+
+        <form method='POST' enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ form.as_p }}
+            <pre>Note : You can add an additional address from Google Maps.
+            If you wish to do so, please copy the link from Google Maps.
+            </pre>
+            <button type="submit" class="btn purple text-white">Submit</button>
+        </form>
+
+    </div>
+{% endblock %}

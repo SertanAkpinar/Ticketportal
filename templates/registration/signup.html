@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control form-control-lg" id="floatingInput" placeholder="Username" name="username">
+                <label for="floatingInput">Username</label>
+                {% for error in form.username.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control form-control-lg" id="floatingInput" placeholder="Email" name="email">
+                <label for="floatingInput">Email address</label>
+                {% for error in form.email.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control form-control-lg" id="floatingPassword" placeholder="Password" name="password1">
+                <label for="floatingPassword">Password</label>
+                {% for error in form.password1.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control form-control-lg" id="floatingPassword" placeholder="Password" name="password2">
+                <label for="floatingPassword">Password confirm</label>
+                {% for error in form.password2.errors %}
+                    <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <button class="mt-4 py-8 px-4 btn purple btn-lg d-block mx-auto form-control text-white">Signup</button>
+        </form>
+
+        <div class="mt-4">
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,238 @@
+{% load bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>TicketHub</title>
+    {% endif %}
+    <!-- Bootstrap CSS -->
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicon_io/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon_io/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon_io/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'images/favicon_io/site.webmanifest' %}">
+    <style>
+        .purple {
+            background-color: #7393D8;
+        }
+        .c-purple {
+            color: #7393D8;
+        }
+        .link-gr {
+            color: #40C6C2;
+        }
+        .bg-gr {
+            background-color: #40C6C2;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-xl-2 col-xl-2 px-sm-2 px-0 bg-dark position-fixed">
+            <div class="d-flex flex-column align-items-center align-items-sm-start pt-2 px-2 text-white min-vh-100">
+                <div class="sidebar-logo">
+                    <img src="{% static 'images/tickethub_logo.png' %}" alt="logo">
+                    <a href="{% url 'home' %}" class="d-md-block d-none">Fantasticket</a>
+                </div>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    <li class="nav-item">
+                        <a href="{% url 'home' %}" class="nav-link align-middle px-0 text-white">
+                            <i class="bi bi-house-door-fill"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
+                            <i class="bi bi-calendar-week-fill"></i>
+                            <span class="ms-1 d-none d-sm-inline">Events</span>
+                        </a>
+                        <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                            <li class="w-100">
+                                <a href="{% url 'home_events' %}" class="nav-link link-gr px-0">
+                                    <i class="bi bi-eye"></i><span class="d-none d-sm-inline ms-1">Show Events</span>
+                                </a>
+                            </li>
+                            {% if user.is_authenticated %}
+                                <li class="w-100">
+                                    <a href="{% url 'my_events' %}" class="nav-link link-gr px-0">
+                                        <i class="bi bi-person-check"></i><span class="d-none d-sm-inline ms-1">My Events</span>
+                                    </a>
+                                </li>
+                                <li class="w-100">
+                                    <a href="{% url 'create_event' %}" class="nav-link link-gr px-0">
+                                        <i class="bi bi-plus-circle"></i><span class="d-none d-sm-inline ms-1">Create Events</span></a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
+                            <i class="bi bi-geo-alt-fill"></i> <span class="ms-1 d-none d-sm-inline">Venues</span>
+                        </a>
+                        <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                            <li class="w-100">
+                                <a href="{% url 'venues' %}" class="nav-link link-gr px-0">
+                                    <i class="bi bi-eye"></i><span class="d-none d-sm-inline ms-1">Show Venues</span>
+                                </a>
+                            </li>
+                            {% if user.is_authenticated %}
+                                <li class="w-100">
+                                    <a href="{% url 'specific_venues' %}" class="nav-link link-gr px-0">
+                                        <i class="bi bi-person-check"></i><span class="d-none d-sm-inline ms-1">My Venues</span>
+                                    </a>
+                                </li>
+                                <li class="w-100">
+                                    <a href="{% url 'create_venue' %}" class="nav-link link-gr px-0">
+                                        <i class="bi bi-plus-circle"></i><span class="d-none d-sm-inline ms-1">Create Venues</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-white">
+                                <i class="bi bi-wallet-fill"></i> <span class="ms-1 d-none d-sm-inline">My Wallet</span>
+                            </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                <li class="w-100">
+                                    <a href="{% url 'checkout_success' %}" class="nav-link link-gr px-0">
+                                        <i class="bi bi-ticket-perforated"></i><span class="d-none d-sm-inline ms-1">Tickets</span>
+                                    </a>
+                                </li>
+                                <li class="w-100">
+                                    <a href="#" class="nav-link link-gr px-0">
+                                        <i class="bi bi-cash"></i><span class="d-none d-sm-inline ms-1">Cash</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a href="{% url 'profile_list' %}" class="nav-link px-0 align-middle text-white">
+                            <i class="bi bi-search"></i> <span class="ms-1 d-none d-sm-inline">Search</span>
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <div class="dropdown pb-4">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                       id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if user.is_authenticated %}
+                            {% if user.profile.profile_pic %}
+                                <img src="{{ user.profile.profile_pic.url }}" alt="profile-pic" width="30"
+                                     height="30"
+                                     class="rounded-circle">
+                            {% else %}
+                                <img src="{% static 'images/default_profile.png' %}" alt="profile-pic" width="30"
+                                     height="30"
+                                     class="rounded-circle">
+                            {% endif %}
+                            <span class="d-none d-sm-inline mx-2">{{ user.username }}</span>
+                        {% else %}
+                            <i class="bi bi-person-fill"></i>
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow text-center">
+                        {% if user.is_authenticated %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'profile' request.user.id %}">
+                                    <i class="bi bi-person-vcard-fill"></i><span>Profile</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'edit_user' %}">
+                                    <i class="bi bi-gear-fill"></i><span>Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="bi bi-unlock-fill"></i><span>Logout</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'signup' %}">
+                                    <i class="bi bi-person-fill-add"></i><span>Signup</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'login' %}">
+                                    <i class="bi bi-lock-fill"></i><span>Login</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 px-3 container">
+            <nav class="navbar navbar-expand d-flex justify-content-between align-items-center gap-2 container">
+                <h1 class="mb-0 ">{% block title %} {% endblock %}</h1>
+                <ul class="d-flex gap-4">
+                    <li class="nav-item">
+                        <a href="{% url 'cart_view' %}" class="nav-link align-middle px-0 fs-5 text-black">
+                            <i class="bi bi-cart2 position-relative">
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill
+                                    {% if request.session.cart_items|length > 0 %} purple{% else %}bg-secondary{% endif %}"
+                                      style="font-size: 0.65em; left: -5px;">
+                                        {% if request.session.cart_items %}
+                                            {{ request.session.cart_items|length }}
+                                        {% else %}
+                                            0
+                                        {% endif %}
+                                </span>
+                            </i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link align-middle px-0 fs-5 text-black">
+                            <i class="bi bi-bell position-relative">
+                                    <span class="position-absolute top-0 start-100 translate-middle
+                                    badge rounded-pill bg-secondary"
+                                          style="font-size: 0.65em; left: -5px;">0
+                                    </span>
+                            </i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link align-middle px-0 fs-5 text-black">
+                            <i class="bi bi-bookmark-star"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="py-3">
+                <div class="container">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show my-3" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% block content %} {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap JS  -->
+{% bootstrap_javascript %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</body>
+</html>

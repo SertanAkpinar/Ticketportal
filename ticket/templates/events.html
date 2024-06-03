@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Events {% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <form method="get" action="{% url 'home_events' %}">
+            <label for="category">Select Category:</label>
+            <select id="category" name="category">
+                <option value="" {% if not category %}selected{% endif %}>All</option>
+                {% for choice in category_choices %}
+                    <option value="{{ choice.0 }}"
+                            {% if category == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Filter">
+        </form>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+            {% for event in events %}
+                <div class="col">
+                    <div class="card overflow-hidden position-relative">
+                        {% if event.image %}
+                            <img src="{{ event.image.url }}"
+                                 class="rounded card-img-top" alt="event_pic"
+                                 style="height: 300px; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/tickethub_logo.png' %}"
+                                 class="rounded card-img-top" alt="default_pic"
+                                 style="height: 300px; object-fit: cover;">
+                        {% endif %}
+                        {% if event.tickets == 0 %}
+                            <span class="position-absolute top-0 end-0 badge bg-warning text-dark">Sold out</span>
+                        {% endif %}
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">{{ event.category }}</h6>
+                            <h4 class="card-title c-purple">{{ event.eventName }}</h4>
+                            {% if event.ticket_price == NONE or event.ticket_price == 0 %}
+                            <h5 class="link-gr">FREE</h5>
+                        {% else %}
+                            <h5 class="link-gr">{{ event.ticket_price }} {{ event.currency }}</h5>
+                        {% endif %}
+                            <p class="card-text">Start: {{ event.start_date }}
+                                - {{ event.start_time|time:"H:i A" }}</p>
+                            <p class="card-text">End: {{ event.end_date }}
+                                - {{ event.end_time|time:"H:i A" }}</p>
+                            <a class="text-decoration-none btn btn-outline-dark d-grid mx-auto
+                                    {% if event.tickets == 0 %}disabled{% endif %}"
+                                   onclick="location.href='{% url 'event_detail' event_id=event.id %}'"
+                            >View Event</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

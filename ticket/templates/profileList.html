@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        {% if profiles %}
+            {% for profile in profiles %}
+                {% if profile.user != request.user %}
+                    <div class="mb-4 card w-75">
+                        <div class="row justify-content-center align-items-center px-2 mt-1">
+                            <div class="col-md-4">
+                                {% if profile.profile_pic %}
+                                    <img src="{{ profile.profile_pic.url }}" class="rounded-circle"
+                                         alt="profile_pic" width="90px">
+                                {% else %}
+                                    <img src="{% static 'images/default_profile.png' %}" class="rounded-circle"
+                                         alt="profile_pic" width="90px">
+                                {% endif %}
+                            </div>
+                            <div class="col-6 card-body">
+                                <h5 class="card-title">{{ profile.username }}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ profile.email }}</h6>
+                                <a href="{% url 'profile' pk=profile.user.id %}" class="card-link">View profile</a>
+                                <a href="#" class="card-link text-black"><i class="bi bi-star"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>No other users to display.</p>
+        {% endif %}
+    </div>
+{% endblock %}

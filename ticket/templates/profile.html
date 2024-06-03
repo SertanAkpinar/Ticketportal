@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if profile %}
+        {% if profile.user == request.user %}
+            My Profile
+        {% else %}
+            {{ profile.username }}'s {{ title }}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="mt-4">
+            {% if profile.profile_pic %}
+                <img src="{{ profile.profile_pic.url }}"
+                     class="rounded-circle" alt="profile_pic" width="150px"
+                     height="150px">
+            {% else %}
+                <img src="{% static 'images/default_profile.png' %}"
+                     class="rounded-circle" alt="profile_pic" width="150px"
+                     height="150px">
+            {% endif %}
+            <div class="card-body border-bottom">
+                <h5 class="card-title">{{ profile.username }}</h5>
+                {% if profile.bio %}
+                    <p class="card-text">{{ profile.bio }}</p>
+                {% else %}
+                    <p class="card-text">No bio yet...</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="mt-4">
+            <h3 class="display-6">{% if profile.user == request.user %}My {% else %} {{ profile.username }}'s {% endif %} Event</h3>
+            {% if owned_events %}
+                <div id="carouselEvent" class="carousel slide">
+                    <div class="carousel-inner">
+                        {% for event in owned_events %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <div class="card mb-2">
+                                    <div class="card-body text-center">
+                                        <h4 class="card-title">Event Name: {{ event.eventName }}</h4>
+                                        <h5 class="card-subtitle mb-2 text-muted">Category: {{ event.category  }}</h5>
+                                        <p class="card-text">Available Tickets: {{ event.tickets }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselEvent" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon purple" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselEvent" data-bs-slide="next">
+                        <span class="carousel-control-next-icon purple" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            {% else %}
+                <p>No venues created yet.</p>
+            {% endif %}
+        </div>
+        <div class="mt-4">
+            <h3 class="display-6">{% if profile.user == request.user %}My {% else %} {{ profile.username }}'s {% endif %} Venues</h3>
+            {% if owned_venues %}
+                <div id="carouselVenue" class="carousel slide">
+                    <div class="carousel-inner">
+                        {% for venue in owned_venues %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <div class="card mb-2">
+                                    <div class="card-body text-center">
+                                        <h4 class="card-title">Venue Name: {{ venue.name }}</h4>
+                                        <h5 class="card-subtitle mb-2 text-muted">Location: {{ venue.location }}</h5>
+                                        <p class="card-text">Capacity: {{ venue.capacity }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselVenue" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon purple" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselVenue" data-bs-slide="next">
+                        <span class="carousel-control-next-icon purple" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            {% else %}
+                <p>No venues created yet.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

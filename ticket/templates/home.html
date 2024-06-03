@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        {% for event in events %}
+            <div class="mb-4 card overflow-hidden">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-4">
+                        {% if event.image %}
+                            <img src="{{ event.image.url }}"
+                                 class="rounded float-start img-thumbnail" alt="event_pic">
+                        {% else %}
+                            <img src="{% static 'images/tickethub_logo.png' %}"
+                                 class="rounded float-start img-thumbnail" alt="default_pic">
+                        {% endif %}
+                        {% if event.tickets == 0 %}
+                            <span class="position-absolute top-0 end-0 badge bg-warning text-dark">Sold out</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-6 card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ event.category }}</h6>
+                        <h4 class="card-title c-purple">
+                            {% if event.tickets == 0 %}
+                                <a class="disabled link-secondary" tabindex="-1"
+                                   aria-disabled="true">{{ event.eventName }}</a>
+                            {% else %}
+                                <a onclick="location.href='{% url 'event_detail' event_id=event.id %}'">
+                                    {{ event.eventName }}
+                                </a>
+                            {% endif %}
+                        </h4>
+                        <p class="card-text">{{ event.description }}</p>
+                        <p class="card-text">Start: {{ event.start_date }} - {{ event.start_time|time:"H:i A" }}</p>
+                        <p class="card-text">End: {{ event.end_date }} - {{ event.end_time|time:"H:i A" }}</p>
+                        <p class="card-text">Artist: {{ event.artistName }}</p>
+                        <span class="card-text">Venue:</span><a class="card-link link-gr"
+                                                                onclick="location.href='{% url 'venue_detail' venue_name=event.venue %}'">
+                        {{ event.venue }}</a>
+                    </div>
+                    <div class="card-footer">
+                        <ul class="entry-meta d-flex align-items-center m-0 p-0">
+                            <li>
+                                <a class="text-decoration-none d-flex align-items-center text-muted"
+                                   onclick="location.href='{% url 'profile' pk=event.owner.id %}'"
+                                >Created by
+                                    {% if user.is_authenticated and event.owner.id == request.user.id %} me
+                                    {% else %}{{ event.owner }}{% endif %}
+                                </a>
+                            </li>
+                            <li><span class="px-3">&bull;</span></li>
+                            <li>
+                                {% if event.ticket_price == NONE or event.ticket_price == 0 %}<span class>FREE</span>
+                                {% else %}
+                                    <span>{{ event.ticket_price }} {{ event.currency }}</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+

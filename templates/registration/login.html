@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="username">
+              <label for="floatingInput">Username</label>
+            </div>
+            <div class="form-floating">
+              <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
+              <label for="floatingPassword">Password</label>
+            </div>
+            <button class="mt-4 py-8 px-4 btn bg-gr btn-lg d-block mx-auto form-control text-white">Login</button>
+        </form>
+    </div>
+{% endblock %}

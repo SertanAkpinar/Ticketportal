@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if user.is_authenticated %}
+        My {{ title }}
+    {% else %}
+        {{ title }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <table id="cart" class="table table-hover table-condensed">
+        <thead>
+          <tr>
+              <th style="width:60%">Product</th>
+              <th style="width:10%">Price</th>
+              <th style="width:15%">Quantity</th>
+              <th style="width:15%"></th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for event_ticket in event_tickets %}
+            <tr>
+            <td data-th="Product">
+                <div class="row">
+                    <div class="col-sm-2 hidden-xs">
+                        {% if event_ticket.event.image %}
+                            <img src="{{ MEDIA_URL }}{{ event_ticket.event.image }}"
+                                 class="rounded img-thumbnail" alt="event_pic"
+                                 style="width:50px; height: 50px; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/tickethub_logo.png' %}"
+                                 class="rounded img-thumbnail" alt="default_pic"
+                                 style="width:50px; height: 50px; object-fit: cover;">
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-10">
+                        <h4>{{ event_ticket.event.eventName }}</h4>
+                        <p>{{ event_ticket.event.description }}</p>
+                    </div>
+                </div>
+            </td>
+            <td data-th="Price">{{ event_ticket.event.ticket_price }} {{ event_ticket.event.currency }}</td>
+            <td data-th="Quantity">
+                <form method="post" action="{% url 'cart_update' event_id=event_ticket.event.id %}">
+                    {% csrf_token %}
+                    <button type="submit" name="action" value="remove" class="btn btn-outline-secondary btn-sm">-</button>
+                    {{ event_ticket.quantity }}
+                    <button type="submit" name="action" value="add" class="btn btn-outline-secondary btn-sm">+</button>
+                </form>
+            </td>
+            <td class="actions" data-th="">
+                <form action="{% url 'cart_delete' event_id=event_ticket.event.id %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn purple"><i class="bi bi-trash text-white"></i></button>
+                </form>
+            </td>
+            </tr>
+        {% endfor %}
+        <tfoot>
+                <tr>
+                    <td colspan="2" class="hidden-xs"></td>
+                    <td class="text-center hidden-xs"><h3>Total: {{ total_cost }}</h3></td>
+                    <td>
+                        <form method="post" action="{% url 'process_checkout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn bg-gr"><span class="text-white d-none d-sm-inline">Checkout</span> <i class="bi bi-arrow-right text-white"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+{% endblock %}
